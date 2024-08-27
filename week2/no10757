@@ -1,0 +1,32 @@
+//10757 큰 수 A+B
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+int main(){
+    string A,B;
+    cin >> A >> B;
+    string result;
+    
+    int carry = 0;
+    while (A.length() < B.length()) A = '0' + A;
+    while (B.length() < A.length()) B = '0' + B;
+    
+    for (int i = A.length() - 1; i >= 0; --i) {
+        int sum = (A[i] - '0') + (B[i] - '0') + carry;
+        carry = sum / 10;
+        result += (sum % 10) + '0';
+    }
+    if (carry) {
+        result += carry + '0';
+    }
+    
+    reverse(result.begin(), result.end());
+    
+    cout << result << endl;
+
+    return 0;
+    
+}

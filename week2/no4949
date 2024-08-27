@@ -1,0 +1,52 @@
+//4949 균형잡힌 세상
+#include <iostream>
+#include <stack>
+#include <string>
+
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+
+    string str;
+
+    while (true) {
+        getline(cin, str);
+
+        if (str == ".") break;
+
+        stack<char> check;
+        bool isBalanced = true;
+
+        for (char ch : str) {
+            if (ch == '(' || ch == '[') {
+                check.push(ch);
+            } else if (ch == ')') {
+                if (check.empty() || check.top() != '(') {
+                    isBalanced = false;
+                    break;
+                }
+                check.pop();
+            } else if (ch == ']') {
+                if (check.empty() || check.top() != '[') {
+                    isBalanced = false;
+                    break;
+                }
+                check.pop();
+            }
+        }
+
+        if (!check.empty()) {
+            isBalanced = false;
+        }
+
+        if (isBalanced) {
+            cout << "yes\n";
+        } else {
+            cout << "no\n";
+        }
+    }
+
+    return 0;
+}
