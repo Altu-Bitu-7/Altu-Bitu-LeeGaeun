@@ -1,0 +1,90 @@
+#include <iostream>
+#include <vector>
+
+const int MAX = 30000;
+using namespace std;
+
+// 소수와 소인수 계산
+vector<int> getPrimes() {
+    vector<int> primes(MAX + 1, 0);
+    for (int i = 2; i * i <= MAX; i++) {
+        if (primes[i] != 0) {
+            continue;
+        }
+        for (int j = i * i; j <= MAX; j += i) {
+            if (primes[j] == 0) {
+                primes[j] = i;
+            }
+        }
+    }
+    return primes;
+}
+
+// 소인수 분해 결과 반환
+vector<int> getPrimeFactors(int k, vector<int> &primes) {
+    vector<int> factors;
+
+    while (k > MAX) {
+        bool found = false;
+        for (int i = 2; i * i <= k; ++i) {
+            if (k % i == 0) {
+                factors.push_back(i);
+                k /= i;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            factors.push_back(k);
+            return factors;
+        }
+    }
+
+    while (primes[k] != 0) {
+        factors.push_back(primes[k]);
+        k /= primes[k];
+    }
+    factors.push_back(k);
+    return factors;
+}
+
+int main() {
+    int A1, B1, A2, B2;
+    // 입력
+    cin >> A1 >> B1;
+    cin >> A2 >> B2;
+
+    // 분수 계산
+    int descendent = A1 * B2 + A2 * B1;
+    int parents = B1 * B2;
+
+    // 소수와 최소 소인수 계산
+    vector<int> primes = getPrimes();
+
+    // 분자와 분모의 소인수 분해
+    vector<int> descendent_division = getPrimeFactors(descendent, primes);
+    vector<int> parents_division = getPrimeFactors(parents, primes);
+
+    // 최대공약수 계산
+    int gcd = 1;
+    size_t i = 0, j = 0;
+
+    while (i < descendent_division.size() && j < parents_division.size()) {
+        if (descendent_division[i] == parents_division[j]) {
+            gcd *= descendent_division[i];
+            i++;
+            j++;
+        } else if (descendent_division[i] < parents_division[j]) {
+            i++;
+        } else {
+            j++;
+        }
+    }
+
+    descendent /= gcd;
+    parents /= gcd;
+
+    cout << descendent << " " << parents;
+
+    return 0;
+}
