@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main() {
+    // 바퀴 칸수 N, 회전 수 K
+    int N, K;
+    cin >> N >> K;
+
+    vector<char> wheel(N, '?');
+    int now=0;
+    // K번의 회전 기록 입력
+    for(int i = 0; i<K; i++){
+        int count;
+        char value;
+        cin >> count >> value;
+        
+        count %= N;
+        now -= count;
+        if(now < 0) now +=N;
+        
+        if(wheel[now] != '?' && wheel[now] != value){
+            cout << "!";
+            return 0;
+        }else wheel[now] = value;
+        
+    }
+    // 중복 확인
+    for(int i=0; i<N-1; i++){
+        for(int j = i + 1; j < N; j++) {
+            if (wheel[i] != '?' && wheel[i] == wheel[j]) {
+                cout << "!";
+                return 0;
+            }
+        }
+    }
+    
+    // 출력
+    int rot = N;
+    while (rot--) {
+        cout << wheel[now];
+        now++;
+        if (now == N) now = 0;
+    }
+    cout << '\n';
+    return 0;
+    
+}
